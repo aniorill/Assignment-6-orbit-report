@@ -9,6 +9,7 @@ import { Satellite } from './satellite';
 export class AppComponent {
   title = 'orbit-report';
   sourceList: Satellite[];
+  displayList: Satellite[];
 
   constructor() {
     this.sourceList = [
@@ -18,6 +19,7 @@ export class AppComponent {
       new Satellite('GPS 938', 'Positioning', '2001-11-01', 'HIGH', true),
       new Satellite('ISS', 'Space Station', '1998-11-20', 'LOW', true),
     ];
+    this.displayList = [];
     const satellitesUrl = 'https://handlers.education.launchcode.org/static/satellites.json';
 
     window.fetch(satellitesUrl).then(function(response) {
@@ -31,15 +33,16 @@ export class AppComponent {
         // TODO: add the new Satellite object to sourceList using: this.sourceList.push(satellite);
         let satellite: object;
         // TODO: loop over satellites
-        for (const data of fetchedSatellites) {
+        for (const fetchedData of fetchedSatellites) {
           satellite = new Satellite(
-            data.name,
-            data.type,
-            data.launchDate,
-            data.orbitType,
-            data.operational
+            fetchedData.name,
+            fetchedData.type,
+            fetchedData.launchDate,
+            fetchedData.orbitType,
+            fetchedData.operational
           );
           this.sourceList.push(satellite);
+          this.displayList = this.sourceList.slice(0);
         }
 
       }.bind(this));
@@ -52,10 +55,12 @@ export class AppComponent {
       const name = this.sourceList.name.toLowerCase();
       if (name.indexOf(searchTerm) >= 0) {
         matchingSatellites.push(this.sourceList);
+
+        // assign this.displayList to be the the array of matching satellites
+        // this will cause Angular to re-make the table, but now only containing matches
+        this.displayList = matchingSatellites;
       }
     }
-    // assign this.displayList to be the the array of matching satellites
-    // this will cause Angular to re-make the table, but now only containing matches
-    this.displayList = matchingSatellites;
   }
+  // make a copy of the sourceList to be shown to the user
 }
