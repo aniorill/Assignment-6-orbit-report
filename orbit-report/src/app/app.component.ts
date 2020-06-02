@@ -45,27 +45,33 @@ export class AppComponent {
             fetchedData.operational
           );
           this.sourceList.push(satellite);
-          this.displayList = this.sourceList.slice(0);
+          this.displayList = this.sourceList.slice();
         }
 
 
-      });
-    });
+      }.bind(this));
+    }.bind(this));
   }
 
   search(searchTerm: string): void {
     const matchingSatellites: Satellite[] = [];
     searchTerm = searchTerm.toLowerCase();
-    for (const datum of matchingSatellites) {
-      const name = this.sourceList.name.toLowerCase();
-      if (name.indexOf(searchTerm) >= 0) {
-        matchingSatellites.push(this.sourceList);
-
-        // assign this.displayList to be the the array of matching satellites
-        // this will cause Angular to re-make the table, but now only containing matches
-        this.displayList = matchingSatellites;
+    // console.log(typeof searchTerm);
+    console.log(searchTerm);
+    console.log(searchTerm);
+    console.log(searchTerm);
+    console.log(searchTerm);
+    console.log(searchTerm);
+    for (const satellite of this.sourceList) {
+      const name = satellite.name.toLowerCase();
+      if (name.includes(searchTerm)) {
+        matchingSatellites.push(satellite);
       }
     }
+    // assign this.displayList to be the the array of matching satellites
+    // this will cause Angular to re-make the table, but now only containing matches
+    this.displayList = matchingSatellites;
+
   }
   // make a copy of the sourceList to be shown to the user
 }
